@@ -1,9 +1,13 @@
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 
-const email = process.env.ADMIN_EMAIL || 'miyinderick@qq.com'
-const password = process.env.ADMIN_PASSWORD || 'admin'
+const email = process.env.ADMIN_EMAIL
+const password = process.env.ADMIN_PASSWORD
 const displayName = process.env.ADMIN_DISPLAY_NAME || '现场审核管理员'
+
+if (!email || !password) {
+  throw new Error('ADMIN_EMAIL and ADMIN_PASSWORD are required.')
+}
 
 const payload = await getPayload({ config: configPromise })
 
@@ -42,7 +46,6 @@ try {
     })
 
     console.log(`Created admin: ${created.email}`)
-    console.log(`Password: ${password}`)
   }
 } finally {
   await payload.destroy()

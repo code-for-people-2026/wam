@@ -14,7 +14,6 @@ type PayloadSubmissionDoc = {
   cellId?: string | null
   content?: string | null
   authorName?: string | null
-  contact?: string | null
   status?: MatrixSubmissionStatus | null
   createdAt?: string | null
 }
@@ -29,7 +28,7 @@ function mapDoc(doc: PayloadSubmissionDoc): MatrixSubmissionRecord | null {
     cellId: doc.cellId,
     content: doc.content,
     authorName: doc.authorName || null,
-    contact: doc.contact || null,
+    contact: null,
     status: doc.status,
     createdAt: doc.createdAt || new Date().toISOString(),
   }
@@ -49,6 +48,14 @@ export async function GET() {
       limit: 500,
       pagination: false,
       depth: 0,
+      select: {
+        id: true,
+        cellId: true,
+        content: true,
+        authorName: true,
+        status: true,
+        createdAt: true,
+      },
       overrideAccess: true,
     })
 

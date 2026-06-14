@@ -15,11 +15,22 @@ function normalizePGSSLMode(url: string): string {
   return url
 }
 
+const configuredDatabaseURL =
+  process.env.PAYLOAD_DATABASE_URL || process.env.DATABASE_URL || process.env.DATABASE_URL_UNPOOLED || ''
+
+const requiresProductionEnv =
+  process.env.VERCEL_ENV === 'production' || process.env.WAM_REQUIRE_PRODUCTION_ENV === 'true'
+
+if (requiresProductionEnv && !configuredDatabaseURL) {
+  throw new Error('Missing PAYLOAD_DATABASE_URL, DATABASE_URL, or DATABASE_URL_UNPOOLED for production.')
+}
+
+if (requiresProductionEnv && !process.env.PAYLOAD_SECRET) {
+  throw new Error('Missing PAYLOAD_SECRET for production.')
+}
+
 const databaseURL = normalizePGSSLMode(
-  process.env.PAYLOAD_DATABASE_URL ||
-    process.env.DATABASE_URL ||
-    process.env.DATABASE_URL_UNPOOLED ||
-    'postgresql://postgres:postgres@127.0.0.1:5432/postgres'
+  configuredDatabaseURL || 'postgresql://postgres:postgres@127.0.0.1:5432/postgres'
 )
 
 const allowSchemaPush =

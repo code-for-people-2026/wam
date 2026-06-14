@@ -14,8 +14,8 @@ node_modules/
 npm-debug.log*
 
 # Local environment
-.env
-.env.local
+.env*
+!.env.example
 .envrc.local
 
 # Build artifacts
