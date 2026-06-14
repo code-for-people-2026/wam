@@ -53,3 +53,16 @@ pnpm build
 ```
 
 GitHub Actions also checks PR title and commit messages. A PR that fails the Conventional Commits check should not be merged.
+
+## Required AI Review
+
+Every pull request must receive one independent AI subagent review before merge.
+
+The author must:
+
+- Spawn a separate code-review subagent for the PR.
+- Ask the reviewer to inspect the full PR diff against the stated requirements.
+- Paste or link the review result in the PR conversation.
+- Fix all Critical and Important findings before merge, or explain why a finding is not applicable.
+
+Do not merge a PR without this review record.
