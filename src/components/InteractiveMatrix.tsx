@@ -1,9 +1,11 @@
 'use client'
 
-import { MessageSquarePlus, RefreshCcw, Send, X } from 'lucide-react'
-import { FormEvent, useEffect, useMemo, useState } from 'react'
+import { MessageSquarePlus, RefreshCcw, X } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useEffect, useMemo, useState } from 'react'
 import type { MatrixCell, MatrixColumn, MatrixRow, MatrixTagTone } from '@/lib/matrix'
 import type { PublicSubmissionsByCell } from '@/lib/public-submissions'
+import { buildExternalFormUrl, DEFAULT_EXTERNAL_FORM_URL } from '@/lib/external-form-url'
 
 type MatrixPayload = {
   submissions?: PublicSubmissionsByCell
@@ -12,8 +14,6 @@ type MatrixPayload = {
     offline?: boolean
   }
 }
-
-type SubmitState = 'idle' | 'submitting' | 'success' | 'error'
 
 type Props = {
   rows: MatrixRow[]
@@ -30,32 +30,38 @@ const tagClass: Record<MatrixTagTone, string> = {
   star: 'tag tag-star',
 }
 
-function resetSubmitState(setSubmitState: (state: SubmitState) => void) {
-  setSubmitState('idle')
-}
-
 async function fetchMatrixPayload(): Promise<MatrixPayload> {
   const response = await fetch('/api/matrix', { method: 'GET', cache: 'no-store' })
   return (await response.json()) as MatrixPayload
 }
 
 export function InteractiveMatrix({ rows, columns, cells }: Props) {
+  const router = useRouter()
   const [selectedId, setSelectedId] = useState(cells[0]?.id ?? 'A1')
   const [submissions, setSubmissions] = useState<PublicSubmissionsByCell>({})
   const [approvedCount, setApprovedCount] = useState(0)
   const [dataOffline, setDataOffline] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [content, setContent] = useState('')
-  const [authorName, setAuthorName] = useState('')
-  const [contact, setContact] = useState('')
-  const [website, setWebsite] = useState('')
-  const [submitState, setSubmitState] = useState<SubmitState>('idle')
   const [panelOpen, setPanelOpen] = useState(true)
 
   const selectedCell = useMemo(
     () => cells.find((cell) => cell.id === selectedId) ?? cells[0],
     [cells, selectedId]
   )
+
+  const chooseCell = (cellId: string) => {
+    setSelectedId(cellId)
+    setPanelOpen(true)
+  }
+
+  const openCell = (cellId: string) => {
+    if (window.matchMedia('(max-width: 980px)').matches) {
+      router.push(`/cell/${cellId}`)
+      return
+    }
+
+    chooseCell(cellId)
+  }
 
   const loadSubmissions = async () => {
     setLoading(true)
@@ -100,39 +106,13 @@ export function InteractiveMatrix({ rows, columns, cells }: Props) {
     }
   }, [])
 
-  const submit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    setSubmitState('submitting')
-
-    try {
-      const response = await fetch('/api/submissions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          cellId: selectedCell?.id,
-          content,
-          authorName,
-          contact,
-          website,
-        }),
-      })
-
-      await response.json()
-      if (!response.ok) {
-        throw new Error('提交失败')
-      }
-
-      setSubmitState('success')
-      setContent('')
-      setAuthorName('')
-      setContact('')
-      setWebsite('')
-    } catch {
-      setSubmitState('error')
-    }
-  }
+  const selectedExternalFormUrl = selectedCell
+      ? buildExternalFormUrl({
+          baseUrl: process.env.NEXT_PUBLIC_EXTERNAL_FORM_URL || DEFAULT_EXTERNAL_FORM_URL,
+          cellId: selectedCell.id,
+          topic: selectedCell.rowTitle,
+        })
+      : DEFAULT_EXTERNAL_FORM_URL
 
   return (
     <main className="app-shell">
@@ -150,7 +130,7 @@ export function InteractiveMatrix({ rows, columns, cells }: Props) {
       </header>
 
       {dataOffline ? (
-        <div className="notice" role="status">
+        <div className="notice notice-hidden" role="status">
           互动数据暂时没有连上，矩阵仍可浏览。
         </div>
       ) : null}
@@ -186,11 +166,7 @@ export function InteractiveMatrix({ rows, columns, cells }: Props) {
                       key={cell.id}
                       type="button"
                       className={cell.id === selectedCell?.id ? 'matrix-cell active' : 'matrix-cell'}
-                      onClick={() => {
-                        setSelectedId(cell.id)
-                        setPanelOpen(true)
-                        setSubmitState('idle')
-                      }}
+                      onClick={() => openCell(cell.id)}
                     >
                       <span className="cell-meta">
                         <b>{cell.id}</b>
@@ -225,7 +201,10 @@ export function InteractiveMatrix({ rows, columns, cells }: Props) {
           ))}
         </div>
 
-        <aside className={panelOpen ? 'submit-panel' : 'submit-panel panel-closed'} aria-hidden={!panelOpen}>
+        <aside
+          className={panelOpen ? 'submit-panel' : 'submit-panel panel-closed'}
+          aria-hidden={!panelOpen}
+        >
           <div className="panel-head">
             <div>
               <span className="selected-id">{selectedCell?.id}</span>
@@ -236,68 +215,20 @@ export function InteractiveMatrix({ rows, columns, cells }: Props) {
             <button
               type="button"
               className="icon-button"
-              onClick={() => {
-                setPanelOpen(false)
-                setSubmitState('idle')
-              }}
+              onClick={() => setPanelOpen(false)}
               aria-label="关闭投稿面板"
             >
               <X size={16} />
             </button>
           </div>
 
-          <form className="submission-form" onSubmit={submit}>
-            <label>
-              <span>你的痛点或点子</span>
-              <textarea
-                value={content}
-                onChange={(event) => {
-                  setContent(event.target.value)
-                  resetSubmitState(setSubmitState)
-                }}
-                maxLength={500}
-                required
-              />
-            </label>
-            <div className="form-row">
-              <label>
-                <span>署名</span>
-                <input
-                  value={authorName}
-                  onChange={(event) => {
-                    setAuthorName(event.target.value)
-                    resetSubmitState(setSubmitState)
-                  }}
-                  maxLength={30}
-                />
-              </label>
-              <label>
-                <span>联系方式</span>
-                <input
-                  value={contact}
-                  onChange={(event) => {
-                    setContact(event.target.value)
-                    resetSubmitState(setSubmitState)
-                  }}
-                  maxLength={80}
-                />
-              </label>
-            </div>
-            <label className="honeypot" aria-hidden="true">
-              Website
-              <input tabIndex={-1} value={website} onChange={(event) => setWebsite(event.target.value)} />
-            </label>
-            <button type="submit" className="submit-button" disabled={submitState === 'submitting'}>
-              {submitState === 'submitting'
-                ? '提交中'
-                : submitState === 'success'
-                  ? '已提交'
-                  : submitState === 'error'
-                    ? '提交失败'
-                    : '提交待审核'}
-              <Send size={16} />
-            </button>
-          </form>
+          <div className="external-submit-panel">
+            <p>补充内容会跳转到飞书表单填写，WAM 页面不收集联系方式。</p>
+            <a href={selectedExternalFormUrl} className="detail-submit-link" rel="noreferrer">
+              补一条
+              <MessageSquarePlus size={16} />
+            </a>
+          </div>
         </aside>
       </section>
     </main>

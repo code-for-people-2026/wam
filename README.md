@@ -46,6 +46,11 @@ pnpm prod:init
 NEXT_PUBLIC_SITE_URL=https://wam.codeforpeople.cn pnpm qr:flyer
 ```
 
+## External Submission Form
+
+The public site links `补一条` to an external Feishu form. WAM does not collect contact details on the public page.
+
+The default Feishu form URL is configured with `NEXT_PUBLIC_EXTERNAL_FORM_URL`. WAM appends hidden prefill parameters for `所属格子` and `能力区域`, so visitors only need to fill `具体补充内容`.
 ## Checks
 
 ```bash
