@@ -160,7 +160,13 @@ export function CellDetailView({ rows, columns, cells, initialCellId }: Props) {
           })
 
           return (
-            <article key={cell.id} className="cell-detail-slide" aria-label={`${cell.id} 格子详情`}>
+            <article
+              key={cell.id}
+              className={
+                cell.id === activeCell?.id ? 'cell-detail-slide active' : 'cell-detail-slide'
+              }
+              aria-label={`${cell.id} 格子详情`}
+            >
               <div className="cell-detail-card">
                 <div className="panel-head">
                   <div>
