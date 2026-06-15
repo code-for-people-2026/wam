@@ -21,7 +21,7 @@ body {
 }
 
 body {
-  background: var(--bg);
+  background: #e9e6df;
   color: var(--ink);
   font-family:
     -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
@@ -40,8 +40,12 @@ button {
 }
 
 .app-shell {
+  width: min(100%, 1588px);
   min-height: 100vh;
-  padding: 18px;
+  margin: 18px auto;
+  background: var(--bg);
+  padding: 45px 49px 38px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
 }
 
 .topbar {
@@ -49,10 +53,9 @@ button {
   align-items: flex-end;
   justify-content: space-between;
   gap: 16px;
-  max-width: 1440px;
-  margin: 0 auto 16px;
+  margin: 0 0 7px;
   border-bottom: 3px solid var(--accent);
-  padding-bottom: 12px;
+  padding-bottom: 6px;
 }
 
 .kicker {
@@ -60,6 +63,11 @@ button {
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.18em;
+}
+
+.app-shell > .topbar .kicker {
+  font-size: 18px;
+  letter-spacing: 0.26em;
 }
 
 h1,
@@ -71,7 +79,7 @@ p {
 
 h1 {
   margin-top: 4px;
-  font-size: 48px;
+  font-size: 40px;
   line-height: 1.05;
 }
 
@@ -80,7 +88,7 @@ h1 {
   align-items: center;
   gap: 8px;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 13px;
   white-space: nowrap;
 }
 
@@ -89,10 +97,10 @@ h1 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 6px;
   background: #fff;
   color: var(--ink);
 }
@@ -106,7 +114,7 @@ h1 {
 
 .matrix-axis-hint {
   color: #8a847c;
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.6;
 }
 
@@ -126,28 +134,30 @@ h1 {
 }
 
 .matrix-subtitle {
-  margin-top: 6px;
+  margin-top: 4px;
   color: var(--muted);
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 17px;
+  line-height: 1.45;
+}
+
+.matrix-subtitle span {
+  color: #8a847c;
+  font-size: 15px;
 }
 
 .matrix-frame {
-  max-width: 1440px;
-  margin: 0 auto;
+  margin: 0;
 }
 
 .matrix-scroll {
   overflow-x: auto;
-  border: 1px solid var(--line);
   background: #fff;
-  box-shadow: 0 8px 28px rgba(73, 42, 20, 0.08);
   -webkit-overflow-scrolling: touch;
 }
 
 .matrix-table {
   width: 100%;
-  min-width: 1180px;
+  min-width: 1480px;
   border-collapse: collapse;
   background: #fff;
   table-layout: fixed;
@@ -168,7 +178,7 @@ h1 {
 
 .matrix-table thead th:first-child,
 .matrix-row-heading {
-  width: 118px;
+  width: 110px;
   background: var(--soft);
 }
 
@@ -184,8 +194,8 @@ h1 {
 .matrix-table thead b,
 .matrix-row-heading b {
   display: block;
-  font-size: 15px;
-  line-height: 1.25;
+  font-size: 17px;
+  line-height: 1.3;
 }
 
 .matrix-table thead small,
@@ -193,7 +203,7 @@ h1 {
   display: block;
   margin-top: 3px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 400;
   line-height: 1.35;
 }
@@ -205,16 +215,15 @@ h1 {
 }
 
 .matrix-table td {
-  height: 186px;
+  height: 227px;
 }
 
 .matrix-cell-link {
   position: relative;
-  display: flex;
-  min-height: 170px;
+  display: block;
+  min-height: 211px;
   height: 100%;
-  flex-direction: column;
-  gap: 6px;
+  padding-bottom: 22px;
   color: inherit;
   text-decoration: none;
   transition: background-color 0.16s ease;
@@ -230,7 +239,8 @@ h1 {
 }
 
 .cell-id {
-  align-self: flex-end;
+  float: right;
+  margin: 1px 0 2px 5px;
   color: var(--muted);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 12px;
@@ -238,50 +248,52 @@ h1 {
 }
 
 .cell-footer {
+  position: absolute;
+  right: 2px;
+  bottom: -2px;
   display: inline-flex;
   align-items: center;
   justify-content: flex-end;
   gap: 4px;
-  margin-top: auto;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .cell-tags,
 .tag-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
+  display: block;
 }
 
 .cell-approved {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
+  display: block;
   margin-top: 1px;
 }
 
 .cell-approved-item {
   display: -webkit-box;
+  clear: left;
   overflow: hidden;
   border: 1px solid rgba(40, 102, 72, 0.24);
-  border-radius: 5px;
+  border-radius: 4px;
   background: rgba(40, 102, 72, 0.08);
   color: #1e593d;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
-  line-height: 1.4;
-  padding: 4px 6px;
+  line-height: 1.35;
+  margin: 0 0 5px;
+  padding: 4px 7px;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
 
 .tag {
   display: block;
+  clear: left;
   border: 1px solid;
   border-radius: 4px;
-  padding: 4px 6px;
-  font-size: 12px;
+  margin: 0 0 5px;
+  padding: 4px 7px;
+  font-size: 14px;
   line-height: 1.35;
 }
 
@@ -319,10 +331,125 @@ h1 {
 }
 
 .tag-star {
-  border-color: #8b1e2d;
+  border: 2px double #fff;
+  outline: 1.5px solid #8b1e2d;
   background: #c0392b;
   color: #fff;
   font-weight: 750;
+}
+
+.matrix-bottom {
+  display: flex;
+  align-items: stretch;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.matrix-legend {
+  flex: 1;
+  border: 1px solid #e8e4dc;
+  border-radius: 6px;
+  background: var(--soft);
+  padding: 10px 14px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.matrix-legend p + p {
+  margin-top: 4px;
+}
+
+.matrix-legend b {
+  color: var(--accent);
+}
+
+.legend-demo {
+  display: inline-block;
+  margin-right: 5px;
+  border: 1px solid;
+  border-radius: 3px;
+  padding: 1px 7px;
+  font-size: 13px;
+}
+
+.legend-red {
+  border-color: rgba(139, 30, 45, 0.28);
+  background: rgba(139, 30, 45, 0.07);
+  color: #7a1b28;
+}
+
+.legend-blue {
+  border-color: rgba(30, 90, 160, 0.28);
+  background: rgba(30, 90, 160, 0.08);
+  color: #174a85;
+}
+
+.legend-black {
+  border-color: #2b2b2b;
+  background: #2b2b2b;
+  color: #f5f2ea;
+}
+
+.legend-gold {
+  border-color: rgba(176, 141, 46, 0.55);
+  background: rgba(176, 141, 46, 0.16);
+  color: #6b500f;
+}
+
+.matrix-qrbox {
+  display: flex;
+  width: 460px;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #e8e4dc;
+  border-radius: 6px;
+  background: #fff;
+  padding: 9px 12px;
+}
+
+.matrix-qrbox img {
+  width: 136px;
+  height: 136px;
+  flex: none;
+}
+
+.matrix-qrbox p {
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.matrix-qrbox b {
+  display: block;
+  margin-bottom: 2px;
+  font-size: 15px;
+}
+
+.matrix-qrbox span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.matrix-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 9px;
+  border-top: 1px solid var(--line);
+  padding-top: 7px;
+  color: #8a847c;
+  font-size: 14px;
+}
+
+.matrix-foot b {
+  display: block;
+  color: var(--accent);
+  font-size: 16px;
+}
+
+.matrix-foot span {
+  display: block;
 }
 
 .submit-panel {
@@ -541,7 +668,10 @@ h3 {
 
 @media (max-width: 980px) {
   .app-shell {
-    padding: 12px 10px 18px;
+    width: 100%;
+    margin: 0;
+    padding: 18px 14px 20px;
+    box-shadow: none;
   }
 
   .topbar {
@@ -557,11 +687,11 @@ h3 {
   }
 
   h1 {
-    font-size: 34px;
+    font-size: 36px;
   }
 
   .matrix-subtitle {
-    font-size: 13px;
+    font-size: 15px;
   }
 
   .matrix-scroll {
@@ -570,47 +700,55 @@ h3 {
   }
 
   .matrix-table {
-    min-width: 980px;
+    min-width: 1480px;
   }
 
   .matrix-table th,
   .matrix-table td {
-    padding: 6px;
+    padding: 8px;
   }
 
   .matrix-table thead th:first-child,
   .matrix-row-heading {
-    width: 86px;
+    width: 110px;
   }
 
   .matrix-table thead b,
   .matrix-row-heading b {
-    font-size: 12px;
+    font-size: 17px;
   }
 
   .matrix-table thead small,
   .matrix-row-heading small {
-    font-size: 10px;
+    font-size: 13px;
   }
 
   .matrix-table td {
-    height: 150px;
+    height: 227px;
   }
 
   .matrix-cell-link {
-    min-height: 138px;
+    min-height: 211px;
   }
 
   .cell-id,
   .cell-footer {
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .tag,
   .cell-approved-item {
-    padding: 3px 5px;
-    font-size: 10px;
-    line-height: 1.32;
+    padding: 4px 7px;
+    font-size: 14px;
+    line-height: 1.35;
+  }
+
+  .matrix-bottom {
+    display: grid;
+  }
+
+  .matrix-qrbox {
+    width: 100%;
   }
 
   h2 {
@@ -657,11 +795,20 @@ h3 {
   }
 
   .matrix-table {
-    min-width: 900px;
+    min-width: 1480px;
   }
 
   .matrix-table thead th:first-child,
   .matrix-row-heading {
-    width: 76px;
+    width: 110px;
+  }
+
+  .matrix-qrbox {
+    align-items: flex-start;
+  }
+
+  .matrix-qrbox img {
+    width: 96px;
+    height: 96px;
   }
 }
