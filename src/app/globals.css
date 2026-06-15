@@ -217,14 +217,16 @@ h1 {
   gap: 6px;
   color: inherit;
   text-decoration: none;
-  transition:
-    background-color 0.16s ease,
-    box-shadow 0.16s ease;
+  transition: background-color 0.16s ease;
 }
 
 .matrix-cell-link:hover {
-  background: rgba(139, 30, 45, 0.025);
-  box-shadow: inset 0 0 0 2px rgba(139, 30, 45, 0.45);
+  background: rgba(139, 30, 45, 0.035);
+}
+
+.matrix-cell-link:focus-visible {
+  outline: 2px solid rgba(139, 30, 45, 0.65);
+  outline-offset: -2px;
 }
 
 .cell-id {
