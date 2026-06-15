@@ -1,6 +1,7 @@
 'use client'
 
 import { MessageSquarePlus, RefreshCcw } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import type { MatrixCell, MatrixColumn, MatrixRow, MatrixTagTone } from '@/lib/matrix'
@@ -90,7 +91,9 @@ export function InteractiveMatrix({ rows, columns, cells }: Props) {
           <div className="kicker">数据平权 · AI 下乡</div>
           <h1>牛马能力剥夺图</h1>
           <p className="matrix-subtitle">
-            7 样能力 × 8 类处境，看看哪些人、哪些被剥夺的能力，还没人认真看过。
+            7 类工友 × 7 样能力 = 49 个方向，看看你想在哪个方向实践。
+            <br />
+            <span>这不是&quot;做哪个最好&quot;，是&quot;哪些人、哪些被剥夺的能力，还没人认真看过&quot;。</span>
           </p>
         </div>
         <div className="topbar-side">
@@ -98,6 +101,8 @@ export function InteractiveMatrix({ rows, columns, cells }: Props) {
             横轴：人在生产关系里的位置
             <br />
             纵轴：被剥夺的能力
+            <br />
+            图例与说明见页底 ↓
           </p>
           <div className="stats">
             <span>{loading ? '同步中' : `${approvedCount} 条已上墙`}</span>
@@ -181,6 +186,48 @@ export function InteractiveMatrix({ rows, columns, cells }: Props) {
           </table>
         </div>
       </section>
+
+      <section className="matrix-bottom" aria-label="图例与扫码说明">
+        <div className="matrix-legend">
+          <p>
+            <span className="legend-demo legend-red">红底 = 红海</span>
+            大公司已做成的对位产品（需求真实存在）。
+          </p>
+          <p>
+            <span className="legend-demo legend-blue">蓝底 = 蓝海</span>
+            还没人认真做的空白；虚线&quot;大厂未覆盖&quot; = 连巨头都没动力沾边的需求。
+          </p>
+          <p>
+            <span className="legend-demo legend-black">黑底 = 黑化</span>
+            产品成熟，但站在平台/老板那边，工友只是被管理、被抽成的对象。
+          </p>
+          <p>
+            <span className="legend-demo legend-gold">金底 = 站到人民这边</span>
+            把利让给人民也做成了的玩家（哪怕不彻底）-- 证明这条路走得通。
+          </p>
+          <p>
+            <b>格子里特意留了空白：点一个格子，把你的痛点和点子补上去。</b>
+          </p>
+        </div>
+
+        <div className="matrix-qrbox">
+          <Image src="/qr-interactive.svg" alt="扫码进入互动矩阵" width={136} height={136} />
+          <p>
+            <b>扫码补充这张矩阵</b>
+            点一个格子，写下你的痛点、观察或产品点子；我们现场审核后，会显示到互动矩阵里。
+            <br />
+            <span>互动内容只收集公开补充，不收集联系方式。</span>
+          </p>
+        </div>
+      </section>
+
+      <footer className="matrix-foot">
+        <div>
+          <b>Code For People</b>
+          <span>一个为工友敲键盘的组织</span>
+        </div>
+        <span>WAM · Worker Ability Map</span>
+      </footer>
     </main>
   )
 }
