@@ -30,6 +30,7 @@ Copy `.env.example` to `.env.local` and configure:
 - `PAYLOAD_SECRET`
 - `SUBMISSION_IP_HASH_SALT`
 - `NEXT_PUBLIC_SITE_URL`
+- `FEISHU_WEBHOOK_SECRET`
 - `ADMIN_EMAIL`
 - `ADMIN_PASSWORD`
 
@@ -51,6 +52,25 @@ NEXT_PUBLIC_SITE_URL=https://wam.codeforpeople.cn pnpm qr:flyer
 The public site links `补一条` to an external Feishu form. WAM does not collect contact details on the public page.
 
 The default Feishu form URL is configured with `NEXT_PUBLIC_EXTERNAL_FORM_URL`. WAM appends hidden prefill parameters for `所属格子` and `能力区域`, so visitors only need to fill `具体补充内容`.
+
+## Feishu Webhook Import
+
+Configure Feishu Base automation to send an HTTP request when a form response creates a new record.
+
+- Method: `POST`
+- URL: `https://wam.codeforpeople.cn/api/feishu/submissions`
+- Header: `x-wam-webhook-secret: <FEISHU_WEBHOOK_SECRET>`
+- Body type: JSON
+
+```json
+{
+  "所属格子": "{{所属格子}}",
+  "能力区域": "{{能力区域}}",
+  "具体补充内容": "{{具体补充内容}}"
+}
+```
+
+The webhook creates a `pending` item in Payload Admin under `互动矩阵` / `矩阵投稿审核`.
 ## Checks
 
 ```bash
