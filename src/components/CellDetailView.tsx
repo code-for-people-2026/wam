@@ -121,7 +121,7 @@ export function CellDetailView({ rows, columns, cells, initialCellId }: Props) {
         </Link>
         <div>
           <div className="kicker">上下翻能力项，左右切人群</div>
-          <h1>牛马能力剥夺图</h1>
+          <h1>牛马能力剥夺矩阵</h1>
         </div>
       </header>
 

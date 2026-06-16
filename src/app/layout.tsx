@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: '牛马能力剥夺图 · 互动矩阵',
+  title: '牛马能力剥夺矩阵 · 互动矩阵',
   description: '为 7x7 矩阵补充你的痛点、观察和实践点子。',
 }
 
