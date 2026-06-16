@@ -70,6 +70,12 @@ export default function MatrixGuidePage() {
           纵轴来自 Amartya Sen 的能力进路：人的福祉不只看消费了什么，而要看“能做什么”。放到软件和 AI
           语境里，就是看哪些能力可以被工具补回来，哪些能力不能再只交给平台定价。
         </p>
+        <p className="guide-source">
+          能力依据延伸阅读：
+          <a href="https://fddi.fudan.edu.cn/45/c4/c18965a411076/page.htm" target="_blank" rel="noreferrer">
+            复旦发展研究院《张军读经典：森〈以自由看待发展〉的博大精深》
+          </a>
+        </p>
         <div className="guide-list guide-list-compact">
           {capabilities.map(([title, body]) => (
             <article key={title}>
