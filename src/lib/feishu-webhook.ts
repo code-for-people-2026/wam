@@ -7,6 +7,7 @@ type FeishuWebhookValue = {
   content: string
   abilityArea?: string
   submissionType?: string
+  softwareName?: string
   authorName?: string
   contact?: string
   secret?: string
@@ -153,11 +154,28 @@ export function parseFeishuSubmissionWebhook(body: unknown): FeishuWebhookParseR
     'column',
     'columnTitle',
   ])
-  const content = readField(record, ['具体补充内容', 'content', 'submission'])
-  const abilityArea = readField(record, ['被剥夺的能力', '能力区域', 'abilityArea', 'topic', 'row', 'rowTitle'])
-  const submissionType = readField(record, ['补充类型', '内容类型', '投稿类型', 'submissionType', 'type', 'category'])
+  const content = readField(record, ['软件需求', '具体补充内容', 'content', 'submission'])
+  const abilityArea = readField(record, [
+    '被剥削的能力',
+    '被剥夺的能力',
+    '能力区域',
+    'abilityArea',
+    'topic',
+    'row',
+    'rowTitle',
+  ])
+  const submissionType = readField(record, [
+    '该软件需求被服务现状',
+    '补充类型',
+    '内容类型',
+    '投稿类型',
+    'submissionType',
+    'type',
+    'category',
+  ])
+  const softwareName = readField(record, ['软件名称', 'softwareName', 'productName'])
   const authorName = readField(record, ['署名', '个人信息', '昵称', '姓名', 'authorName', 'name'])
-  const contact = readField(record, ['联系方式', '联系信息', 'contact', 'phone', 'wechat', 'email'])
+  const contact = readField(record, ['联系方式', '电话号码', '联系信息', 'contact', 'phone', 'wechat', 'email'])
   const secret = readField(record, ['secret', 'webhookSecret'])
   const cellId = resolveCellId({ explicitCellId, productionPosition, abilityArea })
 
@@ -184,6 +202,7 @@ export function parseFeishuSubmissionWebhook(body: unknown): FeishuWebhookParseR
       content,
       ...(abilityArea ? { abilityArea } : {}),
       ...(submissionType ? { submissionType } : {}),
+      ...(softwareName ? { softwareName } : {}),
       ...(authorName ? { authorName } : {}),
       ...(contact ? { contact } : {}),
       ...(secret ? { secret } : {}),

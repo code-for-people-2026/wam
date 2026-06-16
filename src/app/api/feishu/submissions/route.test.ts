@@ -31,9 +31,10 @@ describe('POST /api/feishu/submissions', () => {
         },
         body: JSON.stringify({
           '生产关系中的位置': '二产',
-          '被剥夺的能力': '时间主权',
-          '补充类型': '黑化：站在平台/老板那边',
-          '具体补充内容': '排班工具要能解释调休逻辑',
+          '被剥削的能力': '时间主权',
+          '该软件需求被服务现状': '黑化：站在平台/老板那边',
+          '软件需求': '排班工具要能解释调休逻辑',
+          '软件名称': '工时核对器',
           '署名': '工友 A',
           '联系方式': 'wechat-a',
         }),
@@ -54,7 +55,7 @@ describe('POST /api/feishu/submissions', () => {
         status: 'pending',
         authorName: '工友 A',
         contact: 'wechat-a',
-        reviewNote: '来源：飞书自动化；被剥夺的能力：时间主权；补充类型：黑化：站在平台/老板那边',
+        reviewNote: '来源：飞书自动化；被剥削的能力：时间主权；被服务现状：黑化：站在平台/老板那边；软件名称：工时核对器',
         userAgent: 'feishu-automation',
       },
     })

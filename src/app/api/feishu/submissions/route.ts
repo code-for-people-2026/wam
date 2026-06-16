@@ -18,11 +18,20 @@ function secretsMatch(provided: string, expected: string): boolean {
   return timingSafeEqual(providedBuffer, expectedBuffer)
 }
 
-function buildReviewNote({ abilityArea, submissionType }: { abilityArea?: string; submissionType?: string }) {
+function buildReviewNote({
+  abilityArea,
+  submissionType,
+  softwareName,
+}: {
+  abilityArea?: string
+  submissionType?: string
+  softwareName?: string
+}) {
   return [
     '来源：飞书自动化',
-    abilityArea ? `被剥夺的能力：${abilityArea}` : '',
-    submissionType ? `补充类型：${submissionType}` : '',
+    abilityArea ? `被剥削的能力：${abilityArea}` : '',
+    submissionType ? `被服务现状：${submissionType}` : '',
+    softwareName ? `软件名称：${softwareName}` : '',
   ]
     .filter(Boolean)
     .join('；')
@@ -65,6 +74,7 @@ export async function POST(request: Request) {
       reviewNote: buildReviewNote({
         abilityArea: parsed.value.abilityArea,
         submissionType: parsed.value.submissionType,
+        softwareName: parsed.value.softwareName,
       }),
       userAgent: request.headers.get('user-agent') || undefined,
     },

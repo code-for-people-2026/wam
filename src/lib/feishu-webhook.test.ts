@@ -6,9 +6,10 @@ describe('parseFeishuSubmissionWebhook', () => {
     const parsed = parseFeishuSubmissionWebhook({
       secret: 'shared-secret',
       '生产关系中的位置': ' 服务业新蓝领 ',
-      '被剥夺的能力': '劳动议价',
-      '补充类型': '蓝海：未被认真服务',
-      '具体补充内容': '  外卖骑手希望有补贴规则截图工具  ',
+      '被剥削的能力': '劳动议价',
+      '该软件需求被服务现状': '蓝海：未被认真服务',
+      '软件需求': '  外卖骑手希望有补贴规则截图工具  ',
+      '软件名称': '  骑手补贴雷达  ',
       '署名': '  小王  ',
       '联系方式': '  wechat-id  ',
     })
@@ -20,6 +21,7 @@ describe('parseFeishuSubmissionWebhook', () => {
         content: '外卖骑手希望有补贴规则截图工具',
         abilityArea: '劳动议价',
         submissionType: '蓝海：未被认真服务',
+        softwareName: '骑手补贴雷达',
         authorName: '小王',
         contact: 'wechat-id',
         secret: 'shared-secret',
@@ -31,9 +33,10 @@ describe('parseFeishuSubmissionWebhook', () => {
     const parsed = parseFeishuSubmissionWebhook({
       fields: {
         '生产关系中的位置': [{ text: '二产' }],
-        '被剥夺的能力': '时间主权',
-        '内容类型': [{ text: '黑化：站在平台/老板那边' }],
-        '具体补充内容': [{ text: '排班工具要能解释调休逻辑' }],
+        '被剥削的能力': '时间主权',
+        '该软件需求被服务现状': [{ text: '黑化：站在平台/老板那边' }],
+        '软件需求': [{ text: '排班工具要能解释调休逻辑' }],
+        '软件名称': [{ text: '工时核对器' }],
         '个人信息': [{ text: '匿名工友' }],
         '联系方式': [{ text: '13800000000' }],
       },
@@ -46,6 +49,7 @@ describe('parseFeishuSubmissionWebhook', () => {
         content: '排班工具要能解释调休逻辑',
         abilityArea: '时间主权',
         submissionType: '黑化：站在平台/老板那边',
+        softwareName: '工时核对器',
         authorName: '匿名工友',
         contact: '13800000000',
       },
@@ -58,8 +62,8 @@ describe('parseFeishuSubmissionWebhook', () => {
         record: {
           fields: {
             '生产关系中的位置': [{ text: '过渡·失业·待业' }],
-            '被剥夺的能力': '劳动议价',
-            '具体补充内容': [{ text: '跨平台收入要能自动汇总' }],
+            '被剥削的能力': '劳动议价',
+            '软件需求': [{ text: '跨平台收入要能自动汇总' }],
           },
         },
       },
@@ -79,8 +83,8 @@ describe('parseFeishuSubmissionWebhook', () => {
     expect(
       parseFeishuSubmissionWebhook({
         '生产关系中的位置': '不存在的位置',
-        '被剥夺的能力': '劳动议价',
-        '具体补充内容': '有效内容',
+        '被剥削的能力': '劳动议价',
+        '软件需求': '有效内容',
       })
     ).toEqual({
       ok: false,
@@ -91,8 +95,8 @@ describe('parseFeishuSubmissionWebhook', () => {
     expect(
       parseFeishuSubmissionWebhook({
         '生产关系中的位置': '一产',
-        '被剥夺的能力': '劳动议价',
-        '具体补充内容': ' ',
+        '被剥削的能力': '劳动议价',
+        '软件需求': ' ',
       })
     ).toEqual({
       ok: false,
