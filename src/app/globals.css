@@ -611,6 +611,21 @@ h1 {
   line-height: 1.78;
 }
 
+.guide-section > .guide-source {
+  font-size: 15px;
+}
+
+.guide-source a {
+  color: var(--accent);
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.guide-source a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .guide-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(238px, 1fr));
