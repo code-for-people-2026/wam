@@ -159,8 +159,8 @@ export function CellDetailView({ rows, columns, cells, initialCellId }: Props) {
           const column = columns.find((item) => item.id === cell.columnId)
           const externalFormUrl = buildExternalFormUrl({
             baseUrl: process.env.NEXT_PUBLIC_EXTERNAL_FORM_URL || DEFAULT_EXTERNAL_FORM_URL,
-            cellId: cell.id,
-            topic: cell.rowTitle,
+            productionPosition: column?.title ?? cell.columnTitle,
+            abilityArea: row?.title ?? cell.rowTitle,
           })
 
           return (

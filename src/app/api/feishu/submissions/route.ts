@@ -21,7 +21,7 @@ function secretsMatch(provided: string, expected: string): boolean {
 function buildReviewNote({ abilityArea, submissionType }: { abilityArea?: string; submissionType?: string }) {
   return [
     '来源：飞书自动化',
-    abilityArea ? `能力区域：${abilityArea}` : '',
+    abilityArea ? `被剥夺的能力：${abilityArea}` : '',
     submissionType ? `补充类型：${submissionType}` : '',
   ]
     .filter(Boolean)

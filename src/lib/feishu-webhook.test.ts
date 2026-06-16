@@ -5,9 +5,9 @@ describe('parseFeishuSubmissionWebhook', () => {
   it('parses Chinese field names from a Feishu automation body', () => {
     const parsed = parseFeishuSubmissionWebhook({
       secret: 'shared-secret',
-      '所属格子': ' C1 ',
-      '能力区域': '劳动议价',
-      '补充类型': '产品点子',
+      '生产关系中的位置': ' 服务业新蓝领 ',
+      '被剥夺的能力': '劳动议价',
+      '补充类型': '蓝海：未被认真服务',
       '具体补充内容': '  外卖骑手希望有补贴规则截图工具  ',
       '署名': '  小王  ',
       '联系方式': '  wechat-id  ',
@@ -19,7 +19,7 @@ describe('parseFeishuSubmissionWebhook', () => {
         cellId: 'C1',
         content: '外卖骑手希望有补贴规则截图工具',
         abilityArea: '劳动议价',
-        submissionType: '产品点子',
+        submissionType: '蓝海：未被认真服务',
         authorName: '小王',
         contact: 'wechat-id',
         secret: 'shared-secret',
@@ -30,9 +30,9 @@ describe('parseFeishuSubmissionWebhook', () => {
   it('parses nested fields from Feishu record-shaped payloads', () => {
     const parsed = parseFeishuSubmissionWebhook({
       fields: {
-        '所属格子': [{ text: 'B2' }],
-        '能力区域': '时间主权',
-        '内容类型': [{ text: '痛点' }],
+        '生产关系中的位置': [{ text: '二产' }],
+        '被剥夺的能力': '时间主权',
+        '内容类型': [{ text: '黑化：站在平台/老板那边' }],
         '具体补充内容': [{ text: '排班工具要能解释调休逻辑' }],
         '个人信息': [{ text: '匿名工友' }],
         '联系方式': [{ text: '13800000000' }],
@@ -45,7 +45,7 @@ describe('parseFeishuSubmissionWebhook', () => {
         cellId: 'B2',
         content: '排班工具要能解释调休逻辑',
         abilityArea: '时间主权',
-        submissionType: '痛点',
+        submissionType: '黑化：站在平台/老板那边',
         authorName: '匿名工友',
         contact: '13800000000',
       },
@@ -57,8 +57,8 @@ describe('parseFeishuSubmissionWebhook', () => {
       event: {
         record: {
           fields: {
-            '所属格子': [{ text: 'E1' }],
-            '能力区域': '劳动议价',
+            '生产关系中的位置': [{ text: '过渡·失业·待业' }],
+            '被剥夺的能力': '劳动议价',
             '具体补充内容': [{ text: '跨平台收入要能自动汇总' }],
           },
         },
@@ -78,7 +78,8 @@ describe('parseFeishuSubmissionWebhook', () => {
   it('rejects invalid cell IDs and blank content', () => {
     expect(
       parseFeishuSubmissionWebhook({
-        '所属格子': 'Z9',
+        '生产关系中的位置': '不存在的位置',
+        '被剥夺的能力': '劳动议价',
         '具体补充内容': '有效内容',
       })
     ).toEqual({
@@ -89,7 +90,8 @@ describe('parseFeishuSubmissionWebhook', () => {
 
     expect(
       parseFeishuSubmissionWebhook({
-        '所属格子': 'A1',
+        '生产关系中的位置': '一产',
+        '被剥夺的能力': '劳动议价',
         '具体补充内容': ' ',
       })
     ).toEqual({

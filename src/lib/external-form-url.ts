@@ -1,15 +1,19 @@
 type ExternalFormUrlInput = {
   baseUrl: string
-  cellId: string
-  topic: string
+  productionPosition: string
+  abilityArea: string
 }
 
 export const DEFAULT_EXTERNAL_FORM_URL =
   'https://qcng630f2p1h.feishu.cn/share/base/form/shrcnWYQXZRpgUhfBhYDSMSjVUg'
 
-export function buildExternalFormUrl({ baseUrl, cellId, topic }: ExternalFormUrlInput) {
+export function buildExternalFormUrl({
+  baseUrl,
+  productionPosition,
+  abilityArea,
+}: ExternalFormUrlInput) {
   const url = new URL(baseUrl)
-  url.searchParams.set('prefill_所属格子', cellId)
-  url.searchParams.set('prefill_能力区域', topic)
+  url.searchParams.set('prefill_生产关系中的位置', productionPosition)
+  url.searchParams.set('prefill_被剥夺的能力', abilityArea)
   return url.toString()
 }

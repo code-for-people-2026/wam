@@ -1,4 +1,4 @@
-import { MATRIX_CELLS, type MatrixCellId } from './matrix'
+import { MATRIX_CELLS, MATRIX_COLUMNS, MATRIX_ROWS, type MatrixCellId } from './matrix'
 
 const validCellIds = new Set(MATRIX_CELLS.map((cell) => cell.id))
 
@@ -81,6 +81,58 @@ function isMatrixCellId(value: string): value is MatrixCellId {
   return validCellIds.has(value)
 }
 
+function normalizeMatrixChoice(value: string): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[\s:：,，.。·/／()（）\-_—]/g, '')
+}
+
+function matchesChoice(value: string, choices: string[]): boolean {
+  const normalizedValue = normalizeMatrixChoice(value)
+  return choices.some((choice) => {
+    const normalizedChoice = normalizeMatrixChoice(choice)
+    return (
+      normalizedValue === normalizedChoice ||
+      normalizedValue.includes(normalizedChoice) ||
+      normalizedChoice.includes(normalizedValue)
+    )
+  })
+}
+
+function resolveCellId({
+  explicitCellId,
+  productionPosition,
+  abilityArea,
+}: {
+  explicitCellId: string
+  productionPosition: string
+  abilityArea: string
+}): MatrixCellId | '' {
+  if (isMatrixCellId(explicitCellId)) {
+    return explicitCellId
+  }
+
+  const normalizedPosition = normalizeMatrixChoice(productionPosition)
+  const column = MATRIX_COLUMNS.find((item) => {
+    return (
+      normalizedPosition === normalizeMatrixChoice(item.letter) ||
+      matchesChoice(productionPosition, [item.title, `${item.letter}${item.title}`, item.subtitle])
+    )
+  })
+
+  const normalizedAbility = normalizeMatrixChoice(abilityArea)
+  const row = MATRIX_ROWS.find((item) => {
+    return (
+      normalizedAbility === String(item.index) ||
+      matchesChoice(abilityArea, [item.title, `${item.index}${item.title}`, item.subtitle])
+    )
+  })
+
+  const inferredCellId = column && row ? `${column.letter}${row.index}` : ''
+  return isMatrixCellId(inferredCellId) ? inferredCellId : ''
+}
+
 export function parseFeishuSubmissionWebhook(body: unknown): FeishuWebhookParseResult {
   const record = asRecord(body)
   if (!record) {
@@ -91,13 +143,23 @@ export function parseFeishuSubmissionWebhook(body: unknown): FeishuWebhookParseR
     }
   }
 
-  const cellId = readField(record, ['所属格子', 'cellId', 'cell'])
+  const explicitCellId = readField(record, ['所属格子', 'cellId', 'cell'])
+  const productionPosition = readField(record, [
+    '生产关系中的位置',
+    '人在生产关系里的位置',
+    '生产位置',
+    'productionPosition',
+    'positionInProduction',
+    'column',
+    'columnTitle',
+  ])
   const content = readField(record, ['具体补充内容', 'content', 'submission'])
-  const abilityArea = readField(record, ['能力区域', 'abilityArea', 'topic'])
+  const abilityArea = readField(record, ['被剥夺的能力', '能力区域', 'abilityArea', 'topic', 'row', 'rowTitle'])
   const submissionType = readField(record, ['补充类型', '内容类型', '投稿类型', 'submissionType', 'type', 'category'])
   const authorName = readField(record, ['署名', '个人信息', '昵称', '姓名', 'authorName', 'name'])
   const contact = readField(record, ['联系方式', '联系信息', 'contact', 'phone', 'wechat', 'email'])
   const secret = readField(record, ['secret', 'webhookSecret'])
+  const cellId = resolveCellId({ explicitCellId, productionPosition, abilityArea })
 
   if (!isMatrixCellId(cellId)) {
     return {
