@@ -10,7 +10,7 @@ type SwipeInput = {
   threshold?: number
 }
 
-const DEFAULT_SWIPE_THRESHOLD = 48
+const DEFAULT_SWIPE_THRESHOLD = 96
 const DIAGONAL_DOMINANCE_RATIO = 1.35
 
 export function resolveSwipeDirection({

@@ -23,7 +23,11 @@ type Props = {
 type SwipePoint = {
   x: number
   y: number
+  startedInScrollableContent: boolean
 }
+
+const SWIPE_NAVIGATION_COOLDOWN_MS = 320
+let lastSwipeNavigationAt = 0
 
 const tagClass: Record<MatrixTagTone, string> = {
   red: 'tag tag-red',
@@ -35,7 +39,11 @@ const tagClass: Record<MatrixTagTone, string> = {
 }
 
 function shouldIgnoreSwipeTarget(target: EventTarget | null) {
-  return target instanceof HTMLElement && Boolean(target.closest('[data-swipe-ignore], a, button'))
+  return target instanceof HTMLElement && Boolean(target.closest('a, button'))
+}
+
+function isScrollableReadingTarget(target: EventTarget | null) {
+  return target instanceof HTMLElement && Boolean(target.closest('.approved-list'))
 }
 
 async function fetchSubmissions(): Promise<PublicSubmissionsByCell> {
@@ -70,9 +78,13 @@ export function CellDetailView({ rows, columns, cells, initialCellId }: Props) {
 
   const goToAdjacentCell = useCallback(
     (direction: 'up' | 'right' | 'down' | 'left') => {
+      const now = Date.now()
+      if (now - lastSwipeNavigationAt < SWIPE_NAVIGATION_COOLDOWN_MS) return
+
       const nextCellId = getAdjacentCellId(activeCellId, direction, rows, columns, cells)
       if (!nextCellId) return
 
+      lastSwipeNavigationAt = now
       setActiveCellId(nextCellId)
       router.replace(`/cell/${nextCellId}`, { scroll: false })
     },
@@ -91,6 +103,7 @@ export function CellDetailView({ rows, columns, cells, initialCellId }: Props) {
     swipeStartRef.current = {
       x: touch.clientX,
       y: touch.clientY,
+      startedInScrollableContent: isScrollableReadingTarget(event.target),
     }
   }
 
@@ -109,6 +122,8 @@ export function CellDetailView({ rows, columns, cells, initialCellId }: Props) {
       endY: touch.clientY,
     })
     if (!direction) return
+
+    if (start.startedInScrollableContent && (direction === 'up' || direction === 'down')) return
 
     goToAdjacentCell(direction)
   }
@@ -195,7 +210,7 @@ export function CellDetailView({ rows, columns, cells, initialCellId }: Props) {
                   ))}
                 </div>
 
-                <section className="approved-list" data-swipe-ignore>
+                <section className="approved-list">
                   <h3>已上墙</h3>
                   {approvedItems.length > 0 ? (
                     approvedItems.map((item) => (
@@ -212,7 +227,6 @@ export function CellDetailView({ rows, columns, cells, initialCellId }: Props) {
                 <a
                   href={externalFormUrl}
                   className="detail-submit-link"
-                  data-swipe-ignore
                   rel="noreferrer"
                 >
                   补一条

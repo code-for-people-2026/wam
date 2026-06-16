@@ -27,6 +27,8 @@ describe('getAdjacentCellId', () => {
 
   it('ignores short or ambiguous diagonal swipes', () => {
     expect(resolveSwipeDirection({ startX: 100, startY: 100, endX: 124, endY: 102 })).toBeNull()
+    expect(resolveSwipeDirection({ startX: 100, startY: 100, endX: 100, endY: 20 })).toBeNull()
+    expect(resolveSwipeDirection({ startX: 100, startY: 100, endX: 180, endY: 100 })).toBeNull()
     expect(resolveSwipeDirection({ startX: 100, startY: 100, endX: 170, endY: 164 })).toBeNull()
   })
 })
