@@ -198,7 +198,7 @@ export function InteractiveMatrix({ rows, columns, cells }: Props) {
         <div className="matrix-legend">
           <p>
             <span className="legend-demo legend-red">红底 = 红海</span>
-            大公司已做成的对位产品（需求真实存在）。
+            大公司已做成的对位产品（需求真实存在），目前倾向不明显。
           </p>
           <p>
             <span className="legend-demo legend-blue">蓝底 = 蓝海</span>
