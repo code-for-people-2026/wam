@@ -22,4 +22,9 @@ describe('InteractiveMatrix', () => {
     expect(source).toContain('href={supplementFormUrl}')
     expect(source).toContain('扫码补充这张矩阵')
   })
+
+  it('renders every matrix tag so mobile thumbnails can show one marker per item', () => {
+    expect(source).toContain('cell.tags.map((tag)')
+    expect(source).not.toContain('cell.tags.slice(0, 2).map')
+  })
 })

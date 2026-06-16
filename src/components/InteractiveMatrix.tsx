@@ -163,7 +163,7 @@ export function InteractiveMatrix({ rows, columns, cells }: Props) {
                         >
                           <span className="cell-id">{cell.id}</span>
                           <span className="cell-tags">
-                            {cell.tags.slice(0, 2).map((tag) => (
+                            {cell.tags.map((tag) => (
                               <span key={`${cell.id}-${tag.text}`} className={tagClass[tag.tone]}>
                                 {tag.tone === 'star' ? '★ ' : ''}
                                 {tag.text}

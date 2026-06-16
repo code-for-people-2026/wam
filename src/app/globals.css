@@ -249,7 +249,7 @@ h1 {
   align-items: center;
   justify-content: flex-start;
   gap: 5px;
-  padding-bottom: 22px;
+  padding: 12px 12px 28px;
   color: inherit;
   text-decoration: none;
   transition: background-color 0.16s ease;
@@ -265,8 +265,9 @@ h1 {
 }
 
 .cell-id {
-  float: none;
-  margin: 0;
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
   color: #8a847c;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 12px;
@@ -276,11 +277,11 @@ h1 {
 
 .cell-footer {
   position: absolute;
-  right: 2px;
-  bottom: -2px;
+  left: 4px;
+  bottom: 4px;
   display: inline-flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 4px;
   color: var(--muted);
   font-size: 14px;
@@ -937,7 +938,7 @@ h3 {
     min-height: 52px;
     align-items: center;
     justify-content: center;
-    padding-bottom: 0;
+    padding: 6px;
   }
 
   .matrix-cell-link:hover {
@@ -945,14 +946,24 @@ h3 {
   }
 
   .cell-id {
-    float: none;
-    margin: 0;
-    color: #8a847c;
-    font-size: 12px;
-    font-weight: 650;
+    display: none;
   }
 
-  .cell-tags,
+  .cell-tags {
+    display: grid;
+    width: min(100%, 42px);
+    gap: 3px;
+  }
+
+  .matrix-cell-link .tag {
+    min-height: 8px;
+    padding: 0;
+    color: transparent;
+    font-size: 0;
+    line-height: 0;
+    white-space: nowrap;
+  }
+
   .cell-approved,
   .cell-footer {
     display: none;
