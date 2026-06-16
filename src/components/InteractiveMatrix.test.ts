@@ -14,4 +14,12 @@ describe('InteractiveMatrix', () => {
     expect(source).toContain('Worker Ability Matrix')
     expect(source).not.toContain('Worker Ability Map')
   })
+
+  it('uses Feishu as the supplement QR destination', () => {
+    expect(source).toContain('DEFAULT_EXTERNAL_FORM_URL')
+    expect(source).toContain('const supplementFormUrl =')
+    expect(source).toContain('className="matrix-qrbox-link"')
+    expect(source).toContain('href={supplementFormUrl}')
+    expect(source).toContain('扫码补充这张矩阵')
+  })
 })

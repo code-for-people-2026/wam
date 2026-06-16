@@ -44,7 +44,7 @@ pnpm prod:init
 ## QR Code
 
 ```bash
-NEXT_PUBLIC_SITE_URL=https://wam.codeforpeople.cn pnpm qr:flyer
+NEXT_PUBLIC_EXTERNAL_FORM_URL=https://qcng630f2p1h.feishu.cn/share/base/form/shrcnWYQXZRpgUhfBhYDSMSjVUg pnpm qr:flyer
 ```
 
 ## External Submission Form
