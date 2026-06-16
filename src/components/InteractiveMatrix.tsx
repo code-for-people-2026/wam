@@ -89,7 +89,7 @@ export function InteractiveMatrix({ rows, columns, cells }: Props) {
       <header className="topbar">
         <div>
           <div className="kicker">数据平权 · AI 下乡</div>
-          <h1>牛马能力剥夺图</h1>
+          <h1>牛马能力剥夺矩阵</h1>
           <p className="matrix-subtitle">
             7 类工友 × 7 样能力 = 49 个方向，看看你想在哪个方向实践。
             <br />
@@ -124,7 +124,11 @@ export function InteractiveMatrix({ rows, columns, cells }: Props) {
           <table className="matrix-table">
             <thead>
               <tr>
-                <th aria-label="能力与处境" />
+                <th aria-label="矩阵说明">
+                  <Link className="matrix-corner-link" href="/matrix-guide">
+                    矩阵说明
+                  </Link>
+                </th>
                 {columns.map((column) => (
                   <th key={column.id} className={column.unsegmented ? 'unsegmented' : undefined}>
                     <b>{column.title}</b>
@@ -226,7 +230,7 @@ export function InteractiveMatrix({ rows, columns, cells }: Props) {
           <b>Code For People</b>
           <span>一个为工友敲键盘的组织</span>
         </div>
-        <span>WAM · Worker Ability Map</span>
+        <span>WAM · Worker Ability Matrix</span>
       </footer>
     </main>
   )

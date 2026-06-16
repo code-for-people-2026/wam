@@ -1,6 +1,6 @@
 # WAM
 
-Worker Ability Map, abbreviated as WAM, is an interactive matrix for collecting, moderating, and publishing worker pain points and product ideas.
+Worker Ability Matrix, abbreviated as WAM, is an interactive matrix for collecting, moderating, and publishing worker pain points and product ideas.
 
 This repository contains only the WAM web application. It is currently deployed as a standalone site and is expected to migrate later into a Code for People website subpage.
 

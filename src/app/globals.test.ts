@@ -3,6 +3,17 @@ import { describe, expect, it } from 'vitest'
 
 const css = readFileSync(new URL('./globals.css', import.meta.url), 'utf8')
 
+function ruleBlock(selector: string) {
+  const start = css.indexOf(`${selector} {`)
+  expect(start).toBeGreaterThanOrEqual(0)
+
+  const openBrace = css.indexOf('{', start)
+  const closeBrace = css.indexOf('}', openBrace)
+  expect(closeBrace).toBeGreaterThan(openBrace)
+
+  return css.slice(openBrace + 1, closeBrace)
+}
+
 function mediaBlock(query: string) {
   const start = css.indexOf(query)
   expect(start).toBeGreaterThanOrEqual(0)
@@ -22,6 +33,19 @@ function mediaBlock(query: string) {
 }
 
 describe('global responsive matrix styles', () => {
+  it('styles the matrix guide entry and guide page shell', () => {
+    const cornerLink = ruleBlock('.matrix-corner-link')
+
+    expect(cornerLink).toContain('font-size: 17px;')
+    expect(cornerLink).toContain('line-height: 1.3;')
+    expect(cornerLink).not.toContain('min-height:')
+    expect(cornerLink).not.toContain('align-items: center;')
+    expect(css).not.toMatch(/\.matrix-corner-link span\s*\{/)
+    expect(css).toMatch(/\.guide-back-icon\s*\{/)
+    expect(css).toMatch(/\.guide-shell\s*\{/)
+    expect(css).not.toMatch(/\.guide-primary-link\s*\{/)
+  })
+
   it('keeps the home matrix as a compact thumbnail grid on mobile', () => {
     const mobile = mediaBlock('@media (max-width: 980px)')
 
