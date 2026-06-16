@@ -55,4 +55,27 @@ describe('global responsive matrix styles', () => {
     expect(mobile).toMatch(/\.cell-tags,\s*\.cell-approved,\s*\.cell-footer\s*\{[\s\S]*display: none;/)
     expect(mobile).not.toContain('min-width: 1480px;')
   })
+
+  it('keeps matrix coordinates visually subordinate to poster content', () => {
+    const cellId = ruleBlock('.cell-id')
+
+    expect(cellId).toContain('color: #8a847c;')
+    expect(cellId).toContain('font-size: 12px;')
+    expect(cellId).toContain('font-weight: 650;')
+    expect(cellId).not.toContain('color: var(--accent);')
+    expect(cellId).not.toContain('font-size: 15px;')
+    expect(cellId).not.toContain('font-weight: 800;')
+  })
+
+  it('does not use free two-axis scroll snapping for mobile cell detail pages', () => {
+    const mobile = mediaBlock('@media (max-width: 980px)')
+
+    expect(mobile).not.toContain('scroll-snap-type: both mandatory;')
+    expect(mobile).not.toContain('grid-template-columns: repeat(8, 100%);')
+    expect(mobile).not.toContain('touch-action: none;')
+    expect(mobile).toMatch(/\.cell-detail-carousel\s*\{[\s\S]*overflow: hidden;/)
+    expect(mobile).toMatch(/\.approved-list\s*\{[\s\S]*flex: 1 1 auto;/)
+    expect(mobile).toMatch(/\.approved-list\s*\{[\s\S]*overflow: auto;/)
+    expect(mobile).toMatch(/\.approved-list\s*\{[\s\S]*touch-action: pan-y;/)
+  })
 })

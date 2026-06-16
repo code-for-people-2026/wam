@@ -3,8 +3,9 @@
 import { MessageSquarePlus } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type TouchEvent } from 'react'
 import type { MatrixCell, MatrixColumn, MatrixRow, MatrixTagTone } from '@/lib/matrix'
+import { getAdjacentCellId, resolveSwipeDirection } from '@/lib/matrix-navigation'
 import type { PublicSubmissionsByCell } from '@/lib/public-submissions'
 import { buildExternalFormUrl, DEFAULT_EXTERNAL_FORM_URL } from '@/lib/external-form-url'
 
@@ -19,6 +20,11 @@ type Props = {
   initialCellId: string
 }
 
+type SwipePoint = {
+  x: number
+  y: number
+}
+
 const tagClass: Record<MatrixTagTone, string> = {
   red: 'tag tag-red',
   blue: 'tag tag-blue',
@@ -26,6 +32,10 @@ const tagClass: Record<MatrixTagTone, string> = {
   black: 'tag tag-black',
   gold: 'tag tag-gold',
   star: 'tag tag-star',
+}
+
+function shouldIgnoreSwipeTarget(target: EventTarget | null) {
+  return target instanceof HTMLElement && Boolean(target.closest('[data-swipe-ignore], a, button'))
 }
 
 async function fetchSubmissions(): Promise<PublicSubmissionsByCell> {
@@ -40,7 +50,7 @@ async function fetchSubmissions(): Promise<PublicSubmissionsByCell> {
 
 export function CellDetailView({ rows, columns, cells, initialCellId }: Props) {
   const router = useRouter()
-  const scrollerRef = useRef<HTMLDivElement>(null)
+  const swipeStartRef = useRef<SwipePoint | null>(null)
   const [submissions, setSubmissions] = useState<PublicSubmissionsByCell>({})
   const [activeCellId, setActiveCellId] = useState(initialCellId)
 
@@ -54,64 +64,54 @@ export function CellDetailView({ rows, columns, cells, initialCellId }: Props) {
     [activeCellId, cells, initialCell]
   )
 
-  const initialColumnIndex = useMemo(
-    () => columns.findIndex((column) => column.id === initialCell?.columnId),
-    [columns, initialCell]
-  )
-
-  const initialRowIndex = useMemo(
-    () => rows.findIndex((row) => row.id === initialCell?.rowId),
-    [rows, initialCell]
-  )
-
   useEffect(() => {
     void fetchSubmissions().then(setSubmissions)
   }, [])
 
-  useLayoutEffect(() => {
-    const scroller = scrollerRef.current
-    if (!scroller) return
+  const goToAdjacentCell = useCallback(
+    (direction: 'up' | 'right' | 'down' | 'left') => {
+      const nextCellId = getAdjacentCellId(activeCellId, direction, rows, columns, cells)
+      if (!nextCellId) return
 
-    const setInitialPosition = () => {
-      scroller.scrollLeft = Math.max(initialColumnIndex, 0) * scroller.clientWidth
-      scroller.scrollTop = Math.max(initialRowIndex, 0) * scroller.clientHeight
+      setActiveCellId(nextCellId)
+      router.replace(`/cell/${nextCellId}`, { scroll: false })
+    },
+    [activeCellId, cells, columns, rows, router]
+  )
+
+  const handleTouchStart = (event: TouchEvent<HTMLDivElement>) => {
+    if (shouldIgnoreSwipeTarget(event.target)) {
+      swipeStartRef.current = null
+      return
     }
 
-    setInitialPosition()
-    const frame = requestAnimationFrame(setInitialPosition)
+    const touch = event.touches[0]
+    if (!touch) return
 
-    return () => cancelAnimationFrame(frame)
-  }, [initialColumnIndex, initialRowIndex])
-
-  useEffect(() => {
-    const scroller = scrollerRef.current
-    if (!scroller) return
-
-    let frame = 0
-    const handleScroll = () => {
-      cancelAnimationFrame(frame)
-      frame = requestAnimationFrame(() => {
-        const nextColumnIndex = Math.round(scroller.scrollLeft / Math.max(scroller.clientWidth, 1))
-        const nextRowIndex = Math.round(scroller.scrollTop / Math.max(scroller.clientHeight, 1))
-        const nextRow = rows[nextRowIndex]
-        const nextColumn = columns[nextColumnIndex]
-        const nextCell = cells.find(
-          (cell) => cell.rowId === nextRow?.id && cell.columnId === nextColumn?.id
-        )
-        if (!nextCell || nextCell.id === activeCellId) return
-
-        setActiveCellId(nextCell.id)
-        router.replace(`/cell/${nextCell.id}`, { scroll: false })
-      })
+    swipeStartRef.current = {
+      x: touch.clientX,
+      y: touch.clientY,
     }
+  }
 
-    scroller.addEventListener('scroll', handleScroll, { passive: true })
+  const handleTouchEnd = (event: TouchEvent<HTMLDivElement>) => {
+    const start = swipeStartRef.current
+    swipeStartRef.current = null
+    if (!start) return
 
-    return () => {
-      cancelAnimationFrame(frame)
-      scroller.removeEventListener('scroll', handleScroll)
-    }
-  }, [activeCellId, cells, columns, rows, router])
+    const touch = event.changedTouches[0]
+    if (!touch) return
+
+    const direction = resolveSwipeDirection({
+      startX: start.x,
+      startY: start.y,
+      endX: touch.clientX,
+      endY: touch.clientY,
+    })
+    if (!direction) return
+
+    goToAdjacentCell(direction)
+  }
 
   return (
     <main className="cell-page">
@@ -145,9 +145,13 @@ export function CellDetailView({ rows, columns, cells, initialCellId }: Props) {
       </div>
 
       <div
-        ref={scrollerRef}
         className="cell-detail-carousel"
         aria-label="格子详情滑动区"
+        onTouchCancel={() => {
+          swipeStartRef.current = null
+        }}
+        onTouchEnd={handleTouchEnd}
+        onTouchStart={handleTouchStart}
       >
         {cells.map((cell) => {
           const approvedItems = submissions[cell.id] ?? []
@@ -191,7 +195,7 @@ export function CellDetailView({ rows, columns, cells, initialCellId }: Props) {
                   ))}
                 </div>
 
-                <section className="approved-list">
+                <section className="approved-list" data-swipe-ignore>
                   <h3>已上墙</h3>
                   {approvedItems.length > 0 ? (
                     approvedItems.map((item) => (
@@ -205,7 +209,12 @@ export function CellDetailView({ rows, columns, cells, initialCellId }: Props) {
                   )}
                 </section>
 
-                <a href={externalFormUrl} className="detail-submit-link" rel="noreferrer">
+                <a
+                  href={externalFormUrl}
+                  className="detail-submit-link"
+                  data-swipe-ignore
+                  rel="noreferrer"
+                >
                   补一条
                   <MessageSquarePlus size={16} />
                 </a>

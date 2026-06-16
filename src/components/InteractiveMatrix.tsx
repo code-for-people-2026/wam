@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import type { MatrixCell, MatrixColumn, MatrixRow, MatrixTagTone } from '@/lib/matrix'
+import { DEFAULT_EXTERNAL_FORM_URL } from '@/lib/external-form-url'
 import type { PublicSubmissionsByCell } from '@/lib/public-submissions'
 
 type MatrixPayload = {
@@ -40,6 +41,8 @@ export function InteractiveMatrix({ rows, columns, cells }: Props) {
   const [approvedCount, setApprovedCount] = useState(0)
   const [dataOffline, setDataOffline] = useState(false)
   const [loading, setLoading] = useState(true)
+  const supplementFormUrl =
+    process.env.NEXT_PUBLIC_EXTERNAL_FORM_URL || DEFAULT_EXTERNAL_FORM_URL
 
   const loadSubmissions = async () => {
     setLoading(true)
@@ -214,15 +217,15 @@ export function InteractiveMatrix({ rows, columns, cells }: Props) {
           </p>
         </div>
 
-        <div className="matrix-qrbox">
-          <Image src="/qr-interactive.svg" alt="扫码进入互动矩阵" width={136} height={136} />
+        <a className="matrix-qrbox-link" href={supplementFormUrl} rel="noreferrer">
+          <Image src="/qr-interactive.svg" alt="扫码打开补充表单" width={136} height={136} />
           <p>
             <b>扫码补充这张矩阵</b>
             点一个格子，写下你的痛点、观察或产品点子；我们现场审核后，会显示到互动矩阵里。
             <br />
             <span>互动内容只收集公开补充，不收集联系方式。</span>
           </p>
-        </div>
+        </a>
       </section>
 
       <footer className="matrix-foot">

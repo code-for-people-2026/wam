@@ -1,9 +1,39 @@
 export type MatrixTagTone = 'red' | 'blue' | 'empty' | 'black' | 'gold' | 'star'
 
-export type MatrixTag = {
+type MatrixTagBase = {
   tone: MatrixTagTone
   text: string
 }
+
+export type MatrixProductTag = MatrixTagBase & {
+  kind: 'product'
+  tone: 'red' | 'black' | 'gold'
+  name: string
+  description: string
+}
+
+export type MatrixNeedTag = MatrixTagBase & {
+  kind: 'need'
+  tone: 'blue'
+  need: string
+}
+
+export type MatrixCoverageGapTag = MatrixTagBase & {
+  kind: 'coverageGap'
+  tone: 'empty'
+  label: string
+}
+
+export type MatrixProgramTag = MatrixTagBase & {
+  kind: 'program'
+  tone: 'star'
+  title: string
+  description: string
+}
+
+export type MatrixTag = MatrixProductTag | MatrixNeedTag | MatrixCoverageGapTag | MatrixProgramTag
+
+type MatrixTagSource = MatrixTagBase
 
 export type MatrixRow = {
   id: string
@@ -61,7 +91,63 @@ export const MATRIX_COLUMNS: MatrixColumn[] = [
   },
 ]
 
-const CELL_TAGS: Record<string, MatrixTag[]> = {
+function splitNameAndDescription(text: string) {
+  const separatorIndex = text.indexOf('：')
+  if (separatorIndex < 0) {
+    return {
+      name: text,
+      description: '',
+    }
+  }
+
+  return {
+    name: text.slice(0, separatorIndex).trim(),
+    description: text.slice(separatorIndex + 1).trim(),
+  }
+}
+
+function createMatrixTag(source: MatrixTagSource): MatrixTag {
+  if (source.tone === 'blue') {
+    return {
+      ...source,
+      tone: 'blue',
+      kind: 'need',
+      need: source.text,
+    }
+  }
+
+  if (source.tone === 'empty') {
+    return {
+      ...source,
+      tone: 'empty',
+      kind: 'coverageGap',
+      label: source.text,
+    }
+  }
+
+  if (source.tone === 'star') {
+    const { name, description } = splitNameAndDescription(source.text)
+
+    return {
+      ...source,
+      tone: 'star',
+      kind: 'program',
+      title: name,
+      description,
+    }
+  }
+
+  const { name, description } = splitNameAndDescription(source.text)
+  return {
+    ...source,
+    tone: source.tone,
+    kind: 'product',
+    name,
+    description,
+  }
+}
+
+const CELL_TAGS: Record<string, MatrixTagSource[]> = {
   A1: [
     { tone: 'gold', text: '拼多多：农货上行，产地直连买家' },
     { tone: 'blue', text: '农产品价格透明 + 直采对接' },
@@ -297,7 +383,7 @@ export const MATRIX_CELLS: MatrixCell[] = MATRIX_ROWS.flatMap((row) =>
       columnId: column.id,
       rowTitle: row.title,
       columnTitle: column.title,
-      tags: CELL_TAGS[id] ?? [],
+      tags: (CELL_TAGS[id] ?? []).map(createMatrixTag),
     }
   })
 )

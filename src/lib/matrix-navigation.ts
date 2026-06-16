@@ -2,6 +2,44 @@ import type { MatrixCell, MatrixColumn, MatrixRow } from './matrix'
 
 export type MatrixDirection = 'up' | 'right' | 'down' | 'left'
 
+type SwipeInput = {
+  startX: number
+  startY: number
+  endX: number
+  endY: number
+  threshold?: number
+}
+
+const DEFAULT_SWIPE_THRESHOLD = 48
+const DIAGONAL_DOMINANCE_RATIO = 1.35
+
+export function resolveSwipeDirection({
+  startX,
+  startY,
+  endX,
+  endY,
+  threshold = DEFAULT_SWIPE_THRESHOLD,
+}: SwipeInput): MatrixDirection | null {
+  const deltaX = endX - startX
+  const deltaY = endY - startY
+  const absoluteX = Math.abs(deltaX)
+  const absoluteY = Math.abs(deltaY)
+
+  if (absoluteX < threshold && absoluteY < threshold) {
+    return null
+  }
+
+  if (absoluteX > absoluteY * DIAGONAL_DOMINANCE_RATIO) {
+    return deltaX < 0 ? 'right' : 'left'
+  }
+
+  if (absoluteY > absoluteX * DIAGONAL_DOMINANCE_RATIO) {
+    return deltaY < 0 ? 'down' : 'up'
+  }
+
+  return null
+}
+
 export function getAdjacentCellId(
   cellId: string,
   direction: MatrixDirection,

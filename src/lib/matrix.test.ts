@@ -18,4 +18,34 @@ describe('matrix data', () => {
       columnId: 'unsegmented',
     })
   })
+
+  it('models poster items by semantic role instead of only by color', () => {
+    expect(getMatrixCell('B1')?.tags[0]).toMatchObject({
+      kind: 'product',
+      tone: 'red',
+      name: '鱼泡网',
+      description: '工地招工记工',
+      text: '鱼泡网：工地招工记工',
+    })
+
+    expect(getMatrixCell('B1')?.tags[1]).toMatchObject({
+      kind: 'need',
+      tone: 'blue',
+      need: '电子厂工时工资自动核对',
+      text: '电子厂工时工资自动核对',
+    })
+
+    expect(getMatrixCell('E1')?.tags[0]).toMatchObject({
+      kind: 'coverageGap',
+      tone: 'empty',
+      label: '大厂未覆盖',
+      text: '大厂未覆盖',
+    })
+
+    expect(getMatrixCell('H7')?.tags[0]).toMatchObject({
+      kind: 'program',
+      tone: 'star',
+      title: '我们的第一个产品',
+    })
+  })
 })

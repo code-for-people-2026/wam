@@ -18,6 +18,7 @@ export default async function CellPage({ params }: Props) {
 
   return (
     <CellDetailView
+      key={cell.id}
       rows={MATRIX_ROWS}
       columns={MATRIX_COLUMNS}
       cells={MATRIX_CELLS}
