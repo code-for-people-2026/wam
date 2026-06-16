@@ -25,9 +25,9 @@ describe('InteractiveMatrix', () => {
     expect(source).toContain('扫码补充这张矩阵')
   })
 
-  it('renders every matrix tag so mobile thumbnails can show one marker per item', () => {
-    expect(source).toContain('cell.tags.map((tag)')
-    expect(source).not.toContain('cell.tags.slice(0, 2).map')
+  it('limits homepage matrix cells to two tag previews', () => {
+    expect(source).toContain('cell.tags.slice(0, 2).map((tag)')
+    expect(source).not.toContain('cell.tags.map((tag)')
   })
 
   it('keeps the manifesto legend from the original flyer', () => {
