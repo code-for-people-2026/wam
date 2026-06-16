@@ -45,7 +45,8 @@ describe('matrix data', () => {
     expect(getMatrixCell('H7')?.tags[0]).toMatchObject({
       kind: 'program',
       tone: 'star',
-      title: '我们的第一个产品',
+      title: '我们的纲领与方向地图',
+      description: '这张 7×7 矩阵——给每个有马克思主义理想的同路人一份可上手的实践地图（是纲领/教材，不是给工友用的软件产品）',
     })
   })
 })

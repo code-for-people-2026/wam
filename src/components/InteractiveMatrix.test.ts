@@ -24,4 +24,12 @@ describe('InteractiveMatrix', () => {
     expect(source).toContain('href={supplementFormUrl}')
     expect(source).toContain('扫码补充这张矩阵')
   })
+
+  it('keeps the manifesto legend from the original flyer', () => {
+    expect(source).toContain('legend-manifesto')
+    expect(source).toContain('★ 我们的纲领')
+    expect(source).toContain('这张矩阵是我们的纲领 / 方向地图')
+    expect(source).toContain('见 H7')
+    expect(source).toContain('它是教材，不是给工友用的软件产品')
+  })
 })

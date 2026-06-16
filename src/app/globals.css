@@ -442,6 +442,18 @@ h1 {
   color: #6b500f;
 }
 
+.legend-manifesto {
+  border: 2px double #fff;
+  outline: 1.5px solid #8b1e2d;
+  background: #c0392b;
+  color: #fff;
+  font-weight: 750;
+}
+
+.legend-manifesto::first-letter {
+  color: #ffd34d;
+}
+
 .matrix-qrbox-link {
   display: flex;
   width: 460px;
