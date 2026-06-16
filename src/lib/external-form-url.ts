@@ -14,6 +14,6 @@ export function buildExternalFormUrl({
 }: ExternalFormUrlInput) {
   const url = new URL(baseUrl)
   url.searchParams.set('prefill_生产关系中的位置', productionPosition)
-  url.searchParams.set('prefill_被剥夺的能力', abilityArea)
+  url.searchParams.set('prefill_被剥削的能力', abilityArea)
   return url.toString()
 }
