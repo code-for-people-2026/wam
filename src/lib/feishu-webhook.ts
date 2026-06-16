@@ -6,6 +6,9 @@ type FeishuWebhookValue = {
   cellId: MatrixCellId
   content: string
   abilityArea?: string
+  submissionType?: string
+  authorName?: string
+  contact?: string
   secret?: string
 }
 
@@ -91,6 +94,9 @@ export function parseFeishuSubmissionWebhook(body: unknown): FeishuWebhookParseR
   const cellId = readField(record, ['所属格子', 'cellId', 'cell'])
   const content = readField(record, ['具体补充内容', 'content', 'submission'])
   const abilityArea = readField(record, ['能力区域', 'abilityArea', 'topic'])
+  const submissionType = readField(record, ['补充类型', '内容类型', '投稿类型', 'submissionType', 'type', 'category'])
+  const authorName = readField(record, ['署名', '个人信息', '昵称', '姓名', 'authorName', 'name'])
+  const contact = readField(record, ['联系方式', '联系信息', 'contact', 'phone', 'wechat', 'email'])
   const secret = readField(record, ['secret', 'webhookSecret'])
 
   if (!isMatrixCellId(cellId)) {
@@ -115,6 +121,9 @@ export function parseFeishuSubmissionWebhook(body: unknown): FeishuWebhookParseR
       cellId,
       content,
       ...(abilityArea ? { abilityArea } : {}),
+      ...(submissionType ? { submissionType } : {}),
+      ...(authorName ? { authorName } : {}),
+      ...(contact ? { contact } : {}),
       ...(secret ? { secret } : {}),
     },
   }

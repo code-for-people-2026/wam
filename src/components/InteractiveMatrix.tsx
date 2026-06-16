@@ -223,7 +223,7 @@ export function InteractiveMatrix({ rows, columns, cells }: Props) {
             <b>扫码补充这张矩阵</b>
             点一个格子，写下你的痛点、观察或产品点子；我们现场审核后，会显示到互动矩阵里。
             <br />
-            <span>互动内容只收集公开补充，不收集联系方式。</span>
+            <span>联系方式可在飞书表单中自愿留下，只给审核人员看。</span>
           </p>
         </a>
       </section>

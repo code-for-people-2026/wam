@@ -32,7 +32,10 @@ describe('POST /api/feishu/submissions', () => {
         body: JSON.stringify({
           '所属格子': 'B2',
           '能力区域': '时间主权',
+          '补充类型': '观察',
           '具体补充内容': '排班工具要能解释调休逻辑',
+          '署名': '工友 A',
+          '联系方式': 'wechat-a',
         }),
       })
     )
@@ -49,9 +52,9 @@ describe('POST /api/feishu/submissions', () => {
         cellId: 'B2',
         content: '排班工具要能解释调休逻辑',
         status: 'pending',
-        authorName: null,
-        contact: null,
-        reviewNote: '来源：飞书自动化；能力区域：时间主权',
+        authorName: '工友 A',
+        contact: 'wechat-a',
+        reviewNote: '来源：飞书自动化；能力区域：时间主权；补充类型：观察',
         userAgent: 'feishu-automation',
       },
     })

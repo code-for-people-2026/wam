@@ -7,7 +7,10 @@ describe('parseFeishuSubmissionWebhook', () => {
       secret: 'shared-secret',
       '所属格子': ' C1 ',
       '能力区域': '劳动议价',
+      '补充类型': '产品点子',
       '具体补充内容': '  外卖骑手希望有补贴规则截图工具  ',
+      '署名': '  小王  ',
+      '联系方式': '  wechat-id  ',
     })
 
     expect(parsed).toEqual({
@@ -16,6 +19,9 @@ describe('parseFeishuSubmissionWebhook', () => {
         cellId: 'C1',
         content: '外卖骑手希望有补贴规则截图工具',
         abilityArea: '劳动议价',
+        submissionType: '产品点子',
+        authorName: '小王',
+        contact: 'wechat-id',
         secret: 'shared-secret',
       },
     })
@@ -26,7 +32,10 @@ describe('parseFeishuSubmissionWebhook', () => {
       fields: {
         '所属格子': [{ text: 'B2' }],
         '能力区域': '时间主权',
+        '内容类型': [{ text: '痛点' }],
         '具体补充内容': [{ text: '排班工具要能解释调休逻辑' }],
+        '个人信息': [{ text: '匿名工友' }],
+        '联系方式': [{ text: '13800000000' }],
       },
     })
 
@@ -36,6 +45,9 @@ describe('parseFeishuSubmissionWebhook', () => {
         cellId: 'B2',
         content: '排班工具要能解释调休逻辑',
         abilityArea: '时间主权',
+        submissionType: '痛点',
+        authorName: '匿名工友',
+        contact: '13800000000',
       },
     })
   })

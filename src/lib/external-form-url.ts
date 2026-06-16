@@ -11,7 +11,5 @@ export function buildExternalFormUrl({ baseUrl, cellId, topic }: ExternalFormUrl
   const url = new URL(baseUrl)
   url.searchParams.set('prefill_所属格子', cellId)
   url.searchParams.set('prefill_能力区域', topic)
-  url.searchParams.set('hide_所属格子', '1')
-  url.searchParams.set('hide_能力区域', '1')
   return url.toString()
 }
