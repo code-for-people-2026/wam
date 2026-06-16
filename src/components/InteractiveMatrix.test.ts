@@ -13,6 +13,8 @@ describe('InteractiveMatrix', () => {
     expect(source).toContain('className="matrix-corner-link"')
     expect(source).toContain('Worker Ability Matrix')
     expect(source).not.toContain('Worker Ability Map')
+    expect(source).toContain('联系方式可在飞书表单中自愿留下')
+    expect(source).not.toContain('不收集联系方式')
   })
 
   it('uses Feishu as the supplement QR destination', () => {

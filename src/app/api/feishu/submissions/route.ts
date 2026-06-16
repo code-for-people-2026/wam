@@ -18,6 +18,16 @@ function secretsMatch(provided: string, expected: string): boolean {
   return timingSafeEqual(providedBuffer, expectedBuffer)
 }
 
+function buildReviewNote({ abilityArea, submissionType }: { abilityArea?: string; submissionType?: string }) {
+  return [
+    '来源：飞书自动化',
+    abilityArea ? `被剥夺的能力：${abilityArea}` : '',
+    submissionType ? `补充类型：${submissionType}` : '',
+  ]
+    .filter(Boolean)
+    .join('；')
+}
+
 export async function POST(request: Request) {
   const expectedSecret = process.env.FEISHU_WEBHOOK_SECRET
   if (!expectedSecret) {
@@ -50,11 +60,12 @@ export async function POST(request: Request) {
       cellId: parsed.value.cellId,
       content: parsed.value.content,
       status: 'pending',
-      authorName: null,
-      contact: null,
-      reviewNote: parsed.value.abilityArea
-        ? `来源：飞书自动化；能力区域：${parsed.value.abilityArea}`
-        : '来源：飞书自动化',
+      authorName: parsed.value.authorName ?? null,
+      contact: parsed.value.contact ?? null,
+      reviewNote: buildReviewNote({
+        abilityArea: parsed.value.abilityArea,
+        submissionType: parsed.value.submissionType,
+      }),
       userAgent: request.headers.get('user-agent') || undefined,
     },
   })
