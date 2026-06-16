@@ -29,4 +29,12 @@ describe('InteractiveMatrix', () => {
     expect(source).toContain('cell.tags.map((tag)')
     expect(source).not.toContain('cell.tags.slice(0, 2).map')
   })
+
+  it('keeps the manifesto legend from the original flyer', () => {
+    expect(source).toContain('legend-manifesto')
+    expect(source).toContain('★ 我们的纲领')
+    expect(source).toContain('这张矩阵是我们的纲领 / 方向地图')
+    expect(source).toContain('见 H7')
+    expect(source).toContain('它是教材，不是给工友用的软件产品')
+  })
 })

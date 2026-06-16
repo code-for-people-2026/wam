@@ -213,6 +213,11 @@ export function InteractiveMatrix({ rows, columns, cells }: Props) {
             把利让给人民也做成了的玩家（哪怕不彻底）-- 证明这条路走得通。
           </p>
           <p>
+            <span className="legend-demo legend-manifesto">★ 我们的纲领</span>
+            这张矩阵是我们的纲领 / 方向地图，面向同路人，把&quot;该往哪使劲&quot;交到每个马克思主义实践者手里（见 H7）--
+            它是教材，不是给工友用的软件产品。
+          </p>
+          <p>
             <b>格子里特意留了空白：点一个格子，把你的痛点和点子补上去。</b>
           </p>
         </div>
