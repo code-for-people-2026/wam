@@ -60,6 +60,17 @@ describe('global responsive matrix styles', () => {
     expect(mobile).not.toContain('min-width: 1480px;')
   })
 
+  it('fits the full matrix inside ordinary desktop viewports without horizontal scrolling', () => {
+    const compactDesktop = mediaBlock('@media (min-width: 981px) and (max-width: 1580px)')
+
+    expect(compactDesktop).toMatch(/\.app-shell\s*\{[\s\S]*padding: 28px 18px 32px;/)
+    expect(compactDesktop).toMatch(/\.matrix-scroll\s*\{[\s\S]*overflow-x: visible;/)
+    expect(compactDesktop).toMatch(/\.matrix-table\s*\{[\s\S]*min-width: 0;/)
+    expect(compactDesktop).toMatch(/\.matrix-table thead th:first-child,\s*\.matrix-row-heading\s*\{[\s\S]*width: 88px;/)
+    expect(compactDesktop).toMatch(/\.matrix-table th,\s*\.matrix-table td\s*\{[\s\S]*padding: 6px;/)
+    expect(compactDesktop).not.toContain('min-width: 1480px;')
+  })
+
   it('keeps matrix coordinates visually subordinate to poster content', () => {
     const cellLink = ruleBlock('.matrix-cell-link')
     const cellId = ruleBlock('.cell-id')
