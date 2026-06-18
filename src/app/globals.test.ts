@@ -85,10 +85,16 @@ describe('global responsive matrix styles', () => {
     expect(cellId).toContain('bottom: 4px;')
     expect(cellFooter).toContain('left: 4px;')
     expect(cellFooter).toContain('bottom: 4px;')
+    expect(cellFooter).toContain('width: 18px;')
+    expect(cellFooter).toContain('height: 18px;')
+    expect(cellFooter).toContain('opacity: 0;')
+    expect(cellFooter).toContain('visibility: hidden;')
     expect(cellFooter).not.toContain('right: 2px;')
     expect(cellId).not.toContain('color: var(--accent);')
     expect(cellId).not.toContain('font-size: 15px;')
     expect(cellId).not.toContain('font-weight: 800;')
+    expect(css).toMatch(/\.matrix-cell-link:hover \.cell-footer,\s*\.matrix-cell-link:focus-visible \.cell-footer\s*\{[\s\S]*opacity: 1;/)
+    expect(css).toMatch(/\.matrix-cell-link:hover \.cell-footer,\s*\.matrix-cell-link:focus-visible \.cell-footer\s*\{[\s\S]*visibility: visible;/)
   })
 
   it('does not use free two-axis scroll snapping for mobile cell detail pages', () => {
