@@ -30,6 +30,14 @@ describe('InteractiveMatrix', () => {
     expect(source).not.toContain('cell.tags.map((tag)')
   })
 
+  it('uses a compact plus cue instead of repeated supplement copy in every cell', () => {
+    expect(source).toContain('className="cell-footer"')
+    expect(source).toContain('aria-hidden="true"')
+    expect(source).toContain('<MessageSquarePlus size={14} />')
+    expect(source).not.toContain("'补一条'")
+    expect(source).not.toContain('`${count} 条`')
+  })
+
   it('keeps the manifesto legend from the original flyer', () => {
     expect(source).toContain('legend-manifesto')
     expect(source).toContain('★ 我们的纲领')
