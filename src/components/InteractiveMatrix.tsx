@@ -152,7 +152,6 @@ export function InteractiveMatrix({ rows, columns, cells }: Props) {
                     if (!cell) return null
                     const approvedItems = submissions[cell.id] ?? []
                     const previewItems = approvedItems.slice(0, 2)
-                    const count = approvedItems.length
 
                     return (
                       <td key={cell.id} className={column.unsegmented ? 'unsegmented' : undefined}>
@@ -179,9 +178,8 @@ export function InteractiveMatrix({ rows, columns, cells }: Props) {
                               ))}
                             </span>
                           ) : null}
-                          <span className="cell-footer">
+                          <span className="cell-footer" aria-hidden="true">
                             <MessageSquarePlus size={14} />
-                            {count > 0 ? `${count} 条` : '补一条'}
                           </span>
                         </Link>
                       </td>
